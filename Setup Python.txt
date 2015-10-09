@@ -1,0 +1,4 @@
+Python 2.7.10 x86
+numpy 1.10.0 x86
+cv2 x86
+PyQt4 4.11.4 x86
