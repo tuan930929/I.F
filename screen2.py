@@ -27,7 +27,7 @@ class Screen2(QtGui.QWidget):
       
         self.setLayout(hbox)    
         
-        self.setFixedSize(300,200)
+        self.setFixedSize(300,150)
         self.move(600,100)
         self.setWindowTitle('Training')    
         self.show()
