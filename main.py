@@ -41,7 +41,7 @@ class MainScreen(QtGui.QWidget):
     def training(self):
         trainingScreen = TrainingScreen()
         trainingScreen.show()
-        return trainingScreen
+        # return trainingScreen
 
     def detect(self):
         detectScreen = DetectScreen()
