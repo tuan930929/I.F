@@ -8,6 +8,7 @@ class Capture():
     def __init__(self):
         self.capturing = False
         self.has_faces = False
+        self.has_training = False
         self.cascPath = "haarcascades/haarcascade_frontalface_default.xml"
         self.faceCascade = cv2.CascadeClassifier(self.cascPath)
         self.recognizer = cv2.createLBPHFaceRecognizer()
@@ -21,6 +22,7 @@ class Capture():
         self.capturing = True
         cap = self.c
         while(self.capturing):
+            self.has_faces = False
             #ret: true - false, frame: pixel array
             ret, frame = cap.read()
             # print("ret")
@@ -38,10 +40,12 @@ class Capture():
                 flags=cv2.CASCADE_SCALE_IMAGE
                 # flags=cv2.cv.CV_HAAR_SCALE_IMAGE
             )
-
             # print("faces")
             # print(faces)
-
+            if faces is None:
+                self.has_faces = False
+            # else:
+            #     self.has_faces = True
             # Draw a rectangle around the faces
             for (x, y, w, h) in faces:
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
@@ -59,8 +63,17 @@ class Capture():
          return im
 
     def capture_face(self):
+        print("pressed Capture Face")
+        if self.capturing == False:
+            print("Need press Start Capture before!")
+            return
+        if self.has_faces == False:
+            print("Detect no Face!")
+            return
         dialog = DialogCapture()
         text = dialog.face_dialog()
+        if text is None:
+            return
         for i in xrange(30):
             temp = self.get_image()
         print("Taking image...")
@@ -84,10 +97,20 @@ class Capture():
         print("self.labels")
         print(self.labels)
         print("training face success!")
+        self.has_training = True
 
     def recognize_face(self):
         print "pressed Recognize Face"
-        self.capturing = True
+        if self.capturing == False:
+            print("Need press Start Capture before!")
+            return
+        if self.has_training == False:
+            print("Need Training Face before!")
+            return
+        if self.has_faces == False:
+            print("Detect no Face!")
+            return
+        # self.capturing = True
         cap = self.c
 
         while(self.capturing):
@@ -152,6 +175,9 @@ class Capture():
 
     def quit_capture(self):
         print "pressed Quit"
+        if self.capturing == True:
+            print("Need press End Capture before")
+            return
         cap = self.c
         cv2.destroyAllWindows()
         cap.release()
@@ -250,6 +276,8 @@ class DialogCapture(QtGui.QInputDialog):
         if ok:
             print "image face name: " + text
             return text
+        else:
+            return
 
 if __name__ == '__main__':
 
