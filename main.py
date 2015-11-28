@@ -16,6 +16,9 @@ class Capture():
         self.images = []
         self.labels = []
         self.labels_name = []
+        # self.images_path = "training_txt/images.txt"
+        # self.labels_path = "training_txt/labels.txt"
+        # self.labels_name_path = "training_txt/labels_name.txt"
 
     def start_capture(self):
         print "pressed start"
@@ -91,6 +94,40 @@ class Capture():
     def training_face(self):
         print "pressed Training Face"
         self.images, self.labels, self.labels_name = self.get_images_and_labels()
+        print("self.images")
+        print(self.images)
+
+        # print("Opening the images.txt")
+        # self.images_txt = open(self.images_path,'w+')
+        # print "Truncating the file.  Goodbye!"
+        # #Empties the file. Watch out if you care about the file.
+        # self.images_txt.truncate()
+        # self.images_txt.write(str(self.images))
+        # self.images_content = self.images_txt.read()
+        # self.images_txt.close()
+        # print("Write to file images.txt success!")
+
+        # print("Opening the labels.txt")
+        # self.labels_txt = open(self.labels_path,'w+')
+        # print "Truncating the file.  Goodbye!"
+        # #Empties the file. Watch out if you care about the file.
+        # self.labels_txt.truncate()
+        # self.labels_txt.write(str(self.labels))
+        # self.labels_content = self.labels_txt.read()
+        # self.labels_txt.close()
+        # print("Write to file labels.txt success!")
+
+        # print("Opening the labels_name.txt")
+        # self.labels_name_txt = open(self.labels_name_path,'w')
+        # print "Truncating the file.  Goodbye!"
+        # #Empties the file. Watch out if you care about the file.
+        # self.labels_name_txt.truncate()
+        # self.labels_name_txt.write(str(self.labels_name))
+        # self.labels_name_txt.close()
+        # print("Write to file labels_name.txt success!")
+
+
+
         self.recognizer.train(self.images, np.array(self.labels))
         print("self.images")
         print(self.images)
