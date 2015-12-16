@@ -1,0 +1,10 @@
+Phát hiện khuôn mặt bằng Adaboost kết hợp cascade để xác định khuôn mặt với các đặc trưng dạng haar-like
+Adaboost được phát triển dựa trên boosting
+Thuật toán boosting:
+-Tạo ra 1 bộ phân loại mạnh từ một tập các bộ phân loại yếu
+-Xây dựng bộ phân loại yếu đầu tiên C1 từ tập D1
+-Xậy dựng bộ phân loại yếu thứ hai C2 từ tập D2. D2 được xây dựng sao cho 1 nửa số mẫu được phân loại đúng bởi C1 và nửa còn lại phân loại sai bởi C1. Bằng cách này D2 chứa đựng những thông tin bổ sung cho C1.
+-Xậy dựng D3 từ những mẫu không được phân loại tốt bởi sự kết hợp giữa C1 và C2: những mẫu còn lại trong D mà C1 và C2 cho kết quả khác nhau. Như vậy D2 sẽ gồm những mẫu mà C1 và C2 hoạt động không hiệu quả. Sau đó huấn luyện C3 từ D3.
+Bây giờ chúng ta có một bộ phân loại mạnh: sự kết hợp của C1, C2 và C3. Khi tiến hành nhận dạng 1 mẫu X, kết quả sẽ được quyết định bởi sự thỏa thuận của 3 bộ. Nếu C1 và C2 đều phân X vào cùng 1 lớp thì lớp này chính là kết quả phân loại của X. Ngược lại nếu C1 và C2 phân X vào 2 lớp khác nhau, C3 sẽ quyết định X thuộc lớp nào.
+Adaboost(Adaptive Boost) hoạt động trên nguyên tắc kết hợp tuyến tính các bộ phân loại yếu dựa trên các đặc trưng haar-like để hình thành 1 bộ phân loại mạnh
+-Để có thể kết hợp các bộ phân loại yếu, adaboost sử dụng 1 trọng số để đánh dấu các mẫu khó nhận dạng. trong quá trình huấn luyện, cứ mỗi bộ phân loại yếu được xây dựng, thuật toán sẽ tiến hành cập nhật lại trọng số để chuẩn bị cho việc xây dựng bộ phân loại yếu tiếp theo: tăng trọng số của các mẫu bị nhận dạng sai và giảm trọng số các mãu được nhận dạng đúng bởi bộ phân loại yếu vừa xây dựng. bằng cách này, các bộ phân loại yếu về sau có thể tập trung vào các mẫu mà bộ phân loại yếu trước chưa thực hiện tốt. sau cùng các bộ phân loại yếu sẽ được kết hợp tùy theo mức độ tốt của chúng để tạo lên 1 bộ phân loại mạnh.

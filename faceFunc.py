@@ -1,9 +1,7 @@
 import cv2, os
 import numpy as np
-import requests
 from PIL import Image
 from PyQt4 import QtGui, QtCore
-# from faceFunc import Capture
 
 class Capture():
     def __init__(self):
@@ -18,9 +16,9 @@ class Capture():
         self.images = []
         self.labels = []
         self.labels_name = []
-        self.images_path = "training_txt/images.txt"
-        self.labels_path = "training_txt/labels.txt"
-        self.labels_name_path = "training_txt/labels_name.txt"
+        # self.images_path = "training_txt/images.txt"
+        # self.labels_path = "training_txt/labels.txt"
+        # self.labels_name_path = "training_txt/labels_name.txt"
 
     def start_capture(self):
         print "pressed start"
@@ -99,44 +97,42 @@ class Capture():
         print("self.images")
         print(self.images)
 
-        print("Opening the images.txt")
-        self.images_txt = open(self.images_path,'w+')
-        print "Truncating the file"
-        #Empties the file
-        self.images_txt.truncate()
-        self.images_txt.write(str(self.images))
-        self.images_content = self.images_txt.read()
-        self.images_txt.close()
-        print("Write to file images.txt success!")
+        # print("Opening the images.txt")
+        # self.images_txt = open(self.images_path,'w+')
+        # print "Truncating the file.  Goodbye!"
+        # #Empties the file. Watch out if you care about the file.
+        # self.images_txt.truncate()
+        # self.images_txt.write(str(self.images))
+        # self.images_content = self.images_txt.read()
+        # self.images_txt.close()
+        # print("Write to file images.txt success!")
 
-        print("Opening the labels.txt")
-        self.labels_txt = open(self.labels_path,'w+')
-        print "Truncating the file"
-        #Empties the file
-        self.labels_txt.truncate()
-        self.labels_txt.write(str(self.labels))
-        self.labels_content = self.labels_txt.read()
-        self.labels_txt.close()
-        print("Write to file labels.txt success!")
+        # print("Opening the labels.txt")
+        # self.labels_txt = open(self.labels_path,'w+')
+        # print "Truncating the file.  Goodbye!"
+        # #Empties the file. Watch out if you care about the file.
+        # self.labels_txt.truncate()
+        # self.labels_txt.write(str(self.labels))
+        # self.labels_content = self.labels_txt.read()
+        # self.labels_txt.close()
+        # print("Write to file labels.txt success!")
 
-        print("Opening the labels_name.txt")
-        self.labels_name_txt = open(self.labels_name_path,'w')
-        print "Truncating the file"
-        #Empties the file
-        self.labels_name_txt.truncate()
-        self.labels_name_txt.write(str(self.labels_name))
-        self.labels_name_txt.close()
-        print("Write to file labels_name.txt success!")
+        # print("Opening the labels_name.txt")
+        # self.labels_name_txt = open(self.labels_name_path,'w')
+        # print "Truncating the file.  Goodbye!"
+        # #Empties the file. Watch out if you care about the file.
+        # self.labels_name_txt.truncate()
+        # self.labels_name_txt.write(str(self.labels_name))
+        # self.labels_name_txt.close()
+        # print("Write to file labels_name.txt success!")
 
 
 
         self.recognizer.train(self.images, np.array(self.labels))
-        print("self.recognizer.train")
-        print(self.recognizer.train(self.images, np.array(self.labels)))
-        # print("self.images")
-        # print(self.images)
-        # print("self.labels")
-        # print(self.labels)
+        print("self.images")
+        print(self.images)
+        print("self.labels")
+        print(self.labels)
         print("training face success!")
         self.has_training = True
 
@@ -182,10 +178,14 @@ class Capture():
             for (x, y, w, h) in faces:
                 # cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 
-                #The more the value of "conf variable" is, the less the recognizer 
-                #has confidence in the recognition. 
-                # A "conf value" of 0.0 is a perfect recognition.
                 nbr_predicted, conf = self.recognizer.predict(gray[y: y + h, x: x + w])
+                # nbr_actual = int(os.path.split(image_path)[1].split(".")[0])
+
+
+                # if nbr_actual == nbr_predicted:
+                #     print "{} is Correctly Recognized with confidence {}".format(nbr_actual, conf)
+                # else:
+                #     print "{} is Incorrect Recognized as {}".format(nbr_actual, nbr_predicted)
 
                 for x in range(0, len(self.labels)):
                     if(self.labels[x] == nbr_predicted):
@@ -196,9 +196,15 @@ class Capture():
                         print(r.url)
                         print(r)
                         return self.labels_name[x]
-                    else:
-                        print "The face is Incorrect Recognized as {}".format(self.labels_name[x],nbr_predicted)
-                print("Face is not in dataset")
+                    # else:
+                    #     print "The face is Incorrect Recognized as {}".format(nbr_predicted)
+                # print("Face is not in dataset")
+                        
+
+
+            # Display the resulting frame
+            # cv2.imshow('Video', frame)
+
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         cv2.destroyAllWindows()
@@ -224,7 +230,7 @@ class Capture():
         # Rather, we will use them to test our accuracy of the training
 
         #name images like that: 1.tuannd.1.png - serials.name.numberFace.png
-        path = '_training_images'
+        path = 'training_images'
         image_paths = [os.path.join(path, f) for f in os.listdir(path)]
         # images will contains face images
         images = []
@@ -255,68 +261,3 @@ class Capture():
         print("labels_name")
         print(labels_name)
         return images, labels, labels_name
-
-class Window(QtGui.QWidget):
-    def __init__(self):
-
-        # c = cv2.VideoCapture(0)
-
-        QtGui.QWidget.__init__(self)
-        self.setWindowTitle('Time Keeper')
-
-        self.capture = Capture()
-        self.start_capture = QtGui.QPushButton('Start Capture',self)
-        self.start_capture.clicked.connect(self.capture.start_capture)
-
-        self.capture_face = QtGui.QPushButton('Capture Face',self)
-        self.capture_face.clicked.connect(self.capture.capture_face)
-
-        self.training_face = QtGui.QPushButton('Training Face',self)
-        self.training_face.clicked.connect(self.capture.training_face)
-
-        self.recognize_face = QtGui.QPushButton('Recognize Face',self)
-        self.recognize_face.clicked.connect(self.capture.recognize_face)
-
-        self.end_capture = QtGui.QPushButton('End Capture',self)
-        self.end_capture.clicked.connect(self.capture.end_capture)
-
-        self.quit_button = QtGui.QPushButton('Quit',self)
-        self.quit_button.clicked.connect(self.capture.quit_capture)
-
-        vbox = QtGui.QVBoxLayout(self)
-        vbox.addWidget(self.start_capture)
-        vbox.addWidget(self.capture_face)
-        vbox.addWidget(self.training_face)
-        vbox.addWidget(self.recognize_face)
-        vbox.addWidget(self.end_capture)
-        vbox.addWidget(self.quit_button)
-
-        self.setLayout(vbox)
-        self.setGeometry(200,200,300,300)
-        self.show()
-
-
-class DialogCapture(QtGui.QInputDialog):
-    def __init__(self):
-
-        # c = cv2.VideoCapture(0)
-
-        QtGui.QInputDialog.__init__(self)
-
-    def face_dialog(self):
-        print "pressed Capture Face"
-        text, ok = QtGui.QInputDialog.getText(self, 'Input Dialog', 
-            'Enter image face name:')
-        
-        if ok:
-            print "image face name: " + text
-            return text
-        else:
-            return
-
-if __name__ == '__main__':
-
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window = Window()
-    sys.exit(app.exec_())
